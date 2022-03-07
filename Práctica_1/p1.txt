@@ -1,0 +1,62 @@
+	AREA codigo, CODE, READONLY,ALIGN=2
+	THUMB
+	EXPORT Start
+Start
+	VLDR.F32 S0, = 3.141592654;
+	VLDR.F32 S1, = 10;
+	VLDR.F32 S2, = 1;
+	VLDR.F32 S3, = 2;
+	VLDR.F32 S4, = 0;
+	VLDR.F32 S5, = -1;
+	VLDR.F32 S7, = 1;
+	VLDR.F32 S9,=0;
+	VLDR.F32 S10, = 3;
+	VLDR.F32 S11,=1
+	VLDR.F32 S13,=0;
+	VLDR.F32 S16,=1
+sumatoria
+	VADD.F32 S4,S7;
+	VMUL.F32 S8,S4,S3;
+	VADD.F32 S15,S8,S13;
+	BL factorial;
+	VADD.F32 S12,S4,S13 ;
+	BL potenciaa
+	VADD.F32 S14,S11,S13;
+	BL potenciab
+	VADD.F32 S17,S16,S13;
+	VDIV.F32 S18,S14,S2;
+	VMUL.F32 S18,S17;
+	VADD.F32 S9,S18;
+	VLDR.F32 S2, =1;
+	VLDR.F32 S16,=1;
+	VLDR.F32 S11,=1;
+	VCMP.F32 S4,S1; 
+	VMRS APSR_nzcv, FPSCR
+	BNE sumatoria
+	VADD.F32 S9,S7;
+Loop
+	B Loop
+factorial
+	VMUL.F32 S2,S8;
+	VSUB.F32 S8,S7;
+	VCMP.F32 S8,S7;
+	VMRS APSR_nzcv, FPSCR ;
+	BNE factorial ; 
+	BX LR ;
+potenciaa ;potencia de -1 a la n
+	VMUL.F32 S11,S5 ;
+	VSUB.F32 S12,S7;
+	VCMP.F32 S12,S13 ;
+	VMRS APSR_nzcv, FPSCR ;
+	BNE potenciaa ;
+	BX LR ; 
+potenciab
+	VMUL.F32 S16,S0 ;
+	VSUB.F32 S15,S7 ; 
+	VCMP.F32 S15,S13 ; 
+	VMRS APSR_nzcv, FPSCR ;
+	BNE potenciab ;
+	BX LR ; 
+
+ALIGN
+END
